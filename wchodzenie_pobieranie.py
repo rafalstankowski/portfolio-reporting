@@ -8,33 +8,36 @@ import time
 import datetime as dt
 import os
 import shutil
+import yaml
 
-#Dane do logowania
+#Data for log in
 login = input('Podaj login:\n')
 passwrd = input('Podaj haslo:\n')
 
-#Ustawianie dat i ilosc brakujacych raportow
+#Configuration file
+config = open(r'C:\Users\John\PycharmProjects\degiro\config.yaml', 'r')
+config = yaml.safe_load(config)
+
+#Setting dates and missing data files
 time_max = dt.datetime.strptime('01/01/2000', '%d/%m/%Y').date()
-path_data = r'E:\Self\data'
+path_data = config['paths']['dest_path']
 files = os.listdir(path_data)
 for f in files:
     if 'Portfolio' in f:
         name, ext = os.path.splitext(f)
-        # print(name[10:])
-        czas = name[10:].replace('-', '/')
-        czas = dt.datetime.strptime(czas, '%d/%m/%Y').date()
-        # print(czas)
-        if czas > time_max:
-            time_max = czas
+        time = name[10:].replace('-', '/')
+        time = dt.datetime.strptime(time, '%d/%m/%Y').date()
+        if time > time_max:
+            time_max = time
     else:
         pass
 
 print(time_max)
-wczoraj = dt.datetime.today().date() + dt.timedelta(days= -1)
-diff = wczoraj - time_max
+yesterday = dt.datetime.today().date() + dt.timedelta(days= -1)
+diff = yesterday - time_max
 print(f'Brakujacych raportow: {diff.days}, ostatni jest za {time_max}')
 
-#Wchodzenie na strone i logowanie
+#Chrome options
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--no-sandbox')
@@ -42,7 +45,7 @@ options.add_argument('--ignore-certificate-errors-spki-list')
 options.add_argument('--ignore-ssl-errors')
 options.add_argument('--start-maximized')
 
-    #Odpalanie przegladarki i odpowiedniej strony
+#Run browser and website
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 driver.get('https://www.degiro.pl/')
 wait = WebDriverWait(driver, 20)
@@ -50,7 +53,7 @@ wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/div[2]
 driver.find_element_by_xpath('/html/body/div[3]/div[2]/div[1]/div/div/nav/div[1]/a[1]').click()
 wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/main/div[2]/form/div[4]/button')))
 
-    #Logowanie
+#Log in
 driver.find_element_by_id('username').send_keys(login)
 driver.find_element_by_id('password').send_keys(passwrd)
 driver.find_element_by_xpath('/html/body/div[1]/div/main/div[2]/form/div[4]/button').click()
@@ -69,11 +72,11 @@ while i < diff.days:
     wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/div/div/div[2]/div/div[2]/a[2]'))).click()  # sciaganie excela
     time.sleep(5)
 
-    filename = 'Portfolio'
+    filename = config['files']['filename']
     ext = '.xls'
     file_new = filename + ' ' + f'{time_max.strftime("%d-%m-%Y")}' + f'{ext}'
-    dl_path = r'C:\Users\John\Downloads\Portfolio.xls'
-    dest_path = r'E:\Self\data'
+    dl_path = config['paths']['dl_path']
+    dest_path = config['paths']['dest_path']
     shutil.move(dl_path, os.path.join(dest_path, file_new))
     print(i, time_max)
     i += 1

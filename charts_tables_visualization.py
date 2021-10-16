@@ -1,8 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime as dt
 
+today = dt.datetime.today().date() + dt.timedelta(days= -1)
 
 def chart1(dataframe):
+
     dataframe.plot(kind='bar', x='Produkt', y='Procent portfela', title='Skład portfela w %', color='grey',
                   figsize=(14, 12), legend=False)
     plt.subplots_adjust(left=0.045, right=0.955, bottom=0.31, top=0.948)
@@ -17,7 +20,7 @@ def chart1(dataframe):
         else:
             plt.text(x=index, y=data + 0.1, s=f'{dataframe.iloc[index, 2]:.2f}pp.', fontsize='x-small', ha='center',
                      va='center', ma='center', color='black')
-    plt.savefig('chart1.png')
+    plt.savefig('chart1 ' + f'{today}' +'.png')
 
 def chart2(dataframe):
     dataframe.plot(kind='bar', x='Produkt', y='Wartość w PLN', title='Skład portfela w PLN', color='grey',
@@ -34,7 +37,7 @@ def chart2(dataframe):
         else:
             plt.text(x=index, y=data + 250, s=f'{dataframe.iloc[index, 2]:.2f}', fontsize='x-small', ha='center',
                      va='center', ma='center', color='black')
-    plt.savefig('chart2.png')
+    plt.savefig('chart2 ' + f'{today}' +'.png')
 
 def chart3(dataframe):
     dataframe.plot(kind='bar', x='Produkt', y='Suma', title='Liczba akcji', color='grey', figsize=(14, 12),
@@ -51,7 +54,7 @@ def chart3(dataframe):
         else:
             plt.text(x=index, y=data + 25, s=f'{dataframe.iloc[index, 2]:.0f}', fontsize='x-small', ha='center',
                      va='center', ma='center', color='black')
-    plt.savefig('chart3.png')
+    plt.savefig('chart3 ' + f'{today}' + '.png')
 
 def table1(table):
     table = table.round(2).head().reset_index(drop=True)
@@ -101,7 +104,7 @@ def table1(table):
     plt.draw()
     # Create image. plt.savefig ignores figure edge and face colors, so map them.
     fig = plt.gcf()
-    plt.savefig('table1.png',
+    plt.savefig('table1 ' + f'{today}' + '.png',
                 # bbox='tight',
                 edgecolor=fig.get_edgecolor(),
                 facecolor=fig.get_facecolor(),
@@ -157,7 +160,7 @@ def table2(table):
     plt.draw()
     # Create image. plt.savefig ignores figure edge and face colors, so map them.
     fig = plt.gcf()
-    plt.savefig('table2.png',
+    plt.savefig('table2 ' + f'{today}' + '.png',
                 # bbox='tight',
                 edgecolor=fig.get_edgecolor(),
                 facecolor=fig.get_facecolor(),

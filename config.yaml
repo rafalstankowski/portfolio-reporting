@@ -1,0 +1,7 @@
+files:
+    filename: Portfolio
+    data_file: E:\Self\data.csv 
+
+paths:
+    dl_path: C:\Users\John\Downloads\Portfolio.xls
+    dest_path: E:\Self\data
