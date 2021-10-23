@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
-import time
+from time import sleep
 import datetime as dt
 import os
 import shutil
@@ -49,8 +49,8 @@ options.add_argument('--start-maximized')
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 driver.get('https://www.degiro.pl/')
 wait = WebDriverWait(driver, 20)
-wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/div[2]/div[1]/div/div/nav/div[1]/a[1]')))
-driver.find_element_by_xpath('/html/body/div[3]/div[2]/div[1]/div/div/nav/div[1]/a[1]').click()
+wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dg-custom-menu"]/div/div/nav/div[1]/a[1]')))
+driver.find_element_by_xpath('//*[@id="dg-custom-menu"]/div/div/nav/div[1]/a[1]').click()
 wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/main/div[2]/form/div[4]/button')))
 
 #Log in
@@ -70,7 +70,7 @@ while i < diff.days:
     driver.find_element_by_xpath('/html/body/div[3]/div/div/div[1]/div').click()
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/div/div/div[2]/div/div[2]/a[2]'))).click()  # sciaganie excela
-    time.sleep(5)
+    sleep(5)
 
     filename = config['files']['filename']
     ext = '.xls'
@@ -80,9 +80,9 @@ while i < diff.days:
     shutil.move(dl_path, os.path.join(dest_path, file_new))
     print(i, time_max)
     i += 1
-    time.sleep(1)
+    sleep(1)
 
 driver.find_element_by_xpath('/html/body/div[3]/div/div/div[3]/button').click()
-time.sleep(2)
+sleep(2)
 driver.find_element_by_xpath('//*[@id="appContainer"]/div/aside/nav[2]/div[2]/button/i').click()
 driver.close()

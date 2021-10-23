@@ -5,3 +5,7 @@ files:
 paths:
     dl_path: C:\Users\John\Downloads\Portfolio.xls
     dest_path: E:\Self\data
+    save_path: E:\Self\wykresiki
+
+pass:
+    sender: Grappa2021

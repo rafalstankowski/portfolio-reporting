@@ -1,8 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
+import yaml
 
-today = dt.datetime.today().date() + dt.timedelta(days= -1)
+#Configuration file
+config = open(r'C:\Users\John\PycharmProjects\degiro\config.yaml', 'r')
+config = yaml.safe_load(config)
+
+yesterday = dt.datetime.today().date() + dt.timedelta(days= -1)
+save_path = config['paths']['save_path']
 
 def chart1(dataframe):
 
@@ -20,7 +26,7 @@ def chart1(dataframe):
         else:
             plt.text(x=index, y=data + 0.1, s=f'{dataframe.iloc[index, 2]:.2f}pp.', fontsize='x-small', ha='center',
                      va='center', ma='center', color='black')
-    plt.savefig('chart1 ' + f'{today}' +'.png')
+    plt.savefig(f'{save_path}' + f'\{yesterday} chart1 ' + '.jpeg')
 
 def chart2(dataframe):
     dataframe.plot(kind='bar', x='Produkt', y='Wartość w PLN', title='Skład portfela w PLN', color='grey',
@@ -37,7 +43,7 @@ def chart2(dataframe):
         else:
             plt.text(x=index, y=data + 250, s=f'{dataframe.iloc[index, 2]:.2f}', fontsize='x-small', ha='center',
                      va='center', ma='center', color='black')
-    plt.savefig('chart2 ' + f'{today}' +'.png')
+    plt.savefig(f'{save_path}' + f'\{yesterday} chart2 ' + '.jpeg')
 
 def chart3(dataframe):
     dataframe.plot(kind='bar', x='Produkt', y='Suma', title='Liczba akcji', color='grey', figsize=(14, 12),
@@ -54,7 +60,7 @@ def chart3(dataframe):
         else:
             plt.text(x=index, y=data + 25, s=f'{dataframe.iloc[index, 2]:.0f}', fontsize='x-small', ha='center',
                      va='center', ma='center', color='black')
-    plt.savefig('chart3 ' + f'{today}' + '.png')
+    plt.savefig(f'{save_path}' + f'\{yesterday} chart3 ' + '.jpeg')
 
 def table1(table):
     table = table.round(2).head().reset_index(drop=True)
@@ -104,7 +110,7 @@ def table1(table):
     plt.draw()
     # Create image. plt.savefig ignores figure edge and face colors, so map them.
     fig = plt.gcf()
-    plt.savefig('table1 ' + f'{today}' + '.png',
+    plt.savefig(f'{save_path}' + f'\{yesterday} table1 ' + '.jpeg',
                 # bbox='tight',
                 edgecolor=fig.get_edgecolor(),
                 facecolor=fig.get_facecolor(),
@@ -160,7 +166,7 @@ def table2(table):
     plt.draw()
     # Create image. plt.savefig ignores figure edge and face colors, so map them.
     fig = plt.gcf()
-    plt.savefig('table2 ' + f'{today}' + '.png',
+    plt.savefig(f'{save_path}' + f'\{yesterday} table2 ' + '.jpeg',
                 # bbox='tight',
                 edgecolor=fig.get_edgecolor(),
                 facecolor=fig.get_facecolor(),
