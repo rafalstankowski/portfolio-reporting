@@ -50,6 +50,10 @@ options.add_argument('--start-maximized')
 driver = webdriver.Chrome(config['paths']['chrome'], options=options)
 driver.get('https://www.degiro.pl/')
 wait = WebDriverWait(driver, 20)
+try:
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'))).click()
+except:
+    pass
 wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dg-custom-menu"]/div/div/nav/div[1]/a[1]')))
 driver.find_element_by_xpath('//*[@id="dg-custom-menu"]/div/div/nav/div[1]/a[1]').click()
 wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/main/div[2]/form/div[4]/button')))

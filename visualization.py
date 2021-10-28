@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
 import yaml
+import os
 
 #Configuration file
 config_localiation = os.path.join(os.getcwd(), 'config.yaml')

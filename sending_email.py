@@ -7,7 +7,8 @@ import os
 import yaml
 
 #Configuration file
-config = open(r'C:\Users\John\PycharmProjects\degiro\config.yaml', 'r')
+config_localiation = os.path.join(os.getcwd(), 'config.yaml')
+config = open(config_localiation, 'r')
 config = yaml.safe_load(config)
 
 yesterday = dt.datetime.today().date() + dt.timedelta(days= -1)
