@@ -1,4 +1,4 @@
-﻿Program do obliczania zysków i zmian w degiro. Poniżej instrukcja:
+Program do obliczania zysków i zmian w degiro. Poniżej instrukcja:
 1. Aby program działał musisz mieć pliki:
 	i) ChromeDriverManager (https://chromedriver.chromium.org)
 	ii) konfiguracyjny: config.yaml
