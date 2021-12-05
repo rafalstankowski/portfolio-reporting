@@ -9,6 +9,8 @@ import os
 import shutil
 import yaml
 
+#test
+
 #Data for log in
 login = input('Podaj login:\n')
 passwrd = input('Podaj haslo:\n')
