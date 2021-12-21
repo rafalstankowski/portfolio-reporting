@@ -108,8 +108,16 @@ df_group_prev = df_group.copy()
 df_group_prev['Data'] = df_group_prev['Data'] + dt.timedelta(days=1)
 df_group_merge = pd.merge(df_group, df_group_prev, how= 'left', left_on= ['Data'], right_on= ['Data'])
 df_group_merge['Diff'] = df_group_merge['Wartość w PLN_x'] - df_group_merge['Wartość w PLN_y']
-df_group_merge = df_group_merge[df_group_merge['Data'] != df_group_merge['Data'].min()]  #Dropping rows which are already in the file
 
+#Calculate total net profit
+df_deposits = pd.read_csv(config['files']['deposits_file'])
+df_deposits = df_deposits.groupby(['Date']).sum()
+df_deposits['CumSum'] = df_deposits["Amount"].cumsum()
+df_group_merge_test = pd.merge(df_group_merge, df_deposits, how= 'left', left_on= ['Data'], right_on= ['Date'])
+
+
+#Dropping rows which are already in the file
+df_group_merge = df_group_merge[df_group_merge['Data'] != df_group_merge['Data'].min()]
 
 #Charts
 df_chart1 = df_data[['Produkt', 'Procent portfela', 'Zmiana procentu portfela']][df_data['Data'] == df_data['Data'].max()].sort_values(by=['Procent portfela'], ascending= False)
@@ -129,6 +137,6 @@ df_table_toplose = df_data[['Produkt', 'Akcje zmiana w %']][df_data['Data'] == d
 v.table2(df_table_toplose)
 
 #Saving data
-daily_file = os.path.join(cwd, 'daily_sum.csv')
-df_group_merge.to_csv(daily_file, mode='a', index = False, header=False)
+daily_sum_file = config['files']['daily_sum_file']
+df_group_merge.to_csv(daily_sum_file, mode='a', index = False, header=False)
 df_data.to_csv(data_file, mode= 'a', index= False, header= False)
