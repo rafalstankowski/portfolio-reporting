@@ -1,12 +1,21 @@
 files:
-    filename: Portfolio
-    data_file: E:\Self\data.csv 
+
+ filename: Portfolio
+
+ data_file: E:\Self\data.csv
+ daily_sum_file: E:\Self\daily_sum.csv
+ deposits_file: E:\Self\deposits_withdraws.csv
 
 paths:
-    dl_path: C:\Users\John\Downloads\Portfolio.xls
-    dest_path: E:\Self\data
-    save_path: E:\Self\wykresiki
-    chrome: C:\Users\John\.wdm\drivers\chromedriver\win32\95.0.4638.17\chromedriver.exe
+
+ dl_path: C:\Users\John\Downloads\Portfolio.xls
+
+ dest_path: E:\Self\data
+
+ save_path: E:\Self\wykresiki
+
+ chrome: C:\Users\John\.wdm\drivers\chromedriver\win32\95.0.4638.17\chromedriver.exe
 
 pass:
-    sender: Grappa2021
+
+ sender: Grappa2021
