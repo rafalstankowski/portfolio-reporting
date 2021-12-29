@@ -88,6 +88,10 @@ df_merge = pd.merge(df_data_diff, df_data_diff2, how='left', left_on= ['Data', '
 df_merge['Wartość w PLN zmiana'] = df_merge['Wartość w PLN_x'] - df_merge['Wartość w PLN_y']
 df_merge['Akcje zmiana w %'] = (df_merge['Kurs _x'].astype('float64') / df_merge['Kurs _y'].astype('float64') - 1) * 100
 df_merge['Zmiana ilości akcji'] = df_merge['Suma_x'] - df_merge['Suma_y']
+df_merge['Wartość w PLN zmiana'] = df_merge['Wartość w PLN zmiana'].fillna(df_merge['Wartość w PLN'])
+df_merge['Akcje zmiana w %'] = df_merge['Akcje zmiana w %'].fillna(0)
+df_merge['Zmiana ilości akcji'] = df_merge['Zmiana ilości akcji'].fillna(df_merge['Suma'])
+
 
 df_group = df_data[['Data', 'Wartość w PLN']].groupby('Data').sum().reset_index()
 df_merge = pd.merge(df_merge, df_group, how='left', on= 'Data')
@@ -97,6 +101,7 @@ df_merge2 = df_merge.copy()
 df_merge2['Data'] = df_merge2['Data'] + dt.timedelta(days=1)
 df_merge = pd.merge(df_merge, df_merge2, how= 'left', left_on= ['Data', 'Produkt',  'Lokalna waluta'], right_on= ['Data', 'Produkt',  'Lokalna waluta'])
 df_merge['Zmiana procentu portfela'] = df_merge['Procent portfela_x'] - df_merge['Procent portfela_y']
+df_merge['Zmiana procentu portfela'] = df_merge['Zmiana procentu portfela'].fillna(0)
 
 df_diffs = df_merge[['Data', 'Produkt', 'Akcje zmiana w %_x', 'Wartość w PLN zmiana_x', 'Procent portfela_x', 'Zmiana procentu portfela', 'Zmiana ilości akcji_x']]
 df_diffs.columns = ['Data', 'Produkt', 'Akcje zmiana w %', 'Wartość w PLN zmiana', 'Procent portfela', 'Zmiana procentu portfela', 'Zmiana ilości akcji']
