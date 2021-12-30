@@ -88,9 +88,9 @@ df_merge = pd.merge(df_data_diff, df_data_diff2, how='left', left_on= ['Data', '
 df_merge['Wartość w PLN zmiana'] = df_merge['Wartość w PLN_x'] - df_merge['Wartość w PLN_y']
 df_merge['Akcje zmiana w %'] = (df_merge['Kurs _x'].astype('float64') / df_merge['Kurs _y'].astype('float64') - 1) * 100
 df_merge['Zmiana ilości akcji'] = df_merge['Suma_x'] - df_merge['Suma_y']
-df_merge['Wartość w PLN zmiana'] = df_merge['Wartość w PLN zmiana'].fillna(df_merge['Wartość w PLN'])
+df_merge['Wartość w PLN zmiana'] = df_merge['Wartość w PLN zmiana'].fillna(df_merge['Wartość w PLN_x'])
 df_merge['Akcje zmiana w %'] = df_merge['Akcje zmiana w %'].fillna(0)
-df_merge['Zmiana ilości akcji'] = df_merge['Zmiana ilości akcji'].fillna(df_merge['Suma'])
+df_merge['Zmiana ilości akcji'] = df_merge['Zmiana ilości akcji'].fillna(df_merge['Suma_x'])
 
 
 df_group = df_data[['Data', 'Wartość w PLN']].groupby('Data').sum().reset_index()
