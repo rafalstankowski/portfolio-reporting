@@ -44,7 +44,9 @@ options = webdriver.ChromeOptions()
 options.add_argument('--start-maximized')
 
 #Run browser and website
-driver = webdriver.Chrome(config['paths']['chrome'], options=options)
+executable_path=r"C:\Users\John\Downloads\chromedriver_win32\chromedriver.exe" #popraswic to
+driver = webdriver.Chrome(executable_path, options=options)
+# driver = webdriver.Chrome(config['paths']['chrome'], options=options)
 driver.get('https://www.degiro.pl/')
 wait = WebDriverWait(driver, 20)
 

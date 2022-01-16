@@ -113,21 +113,28 @@ df_group_prev = df_group.copy()
 df_group_prev['Data'] = df_group_prev['Data'] + dt.timedelta(days=1)
 df_group_merge = pd.merge(df_group, df_group_prev, how= 'left', left_on= ['Data'], right_on= ['Data'])
 df_group_merge['Diff'] = df_group_merge['Wartość w PLN_x'] - df_group_merge['Wartość w PLN_y']
+df_group_merge['Data'] = df_group_merge['Data'].astype(str)
 
 #Calculate total net profit
 df_deposits = pd.read_csv(config['files']['deposits_file'])
 df_deposits = df_deposits.groupby(['Date']).sum()
 df_deposits.reset_index(inplace=True)
+df_deposits['Date'] = pd.to_datetime(df_deposits.Date)
+df_deposits = df_deposits.sort_values(by=['Date'])
 df_deposits['Date'] = df_deposits['Date'].astype(str)
 df_deposits['CumSum'] = df_deposits["Amount"].cumsum()
-df_group_merge['Data'] = df_group_merge['Data'].astype(str)
+
+if df_deposits['Date'].max() != df_group_merge['Data'].min():
+    df_depo = df_deposits[df_deposits['Date'] == df_deposits['Date'].max()]
+    df_depo.iloc[0, 0] = df_group_merge['Data'].min()
+    df_deposits = pd.concat([df_deposits, df_depo])
+
 df_group_merge = pd.merge(df_group_merge, df_deposits, how= 'left', left_on= ['Data'], right_on= ['Date'])
 df_group_merge.drop('Date', axis='columns', inplace=True)
 df_group_merge['CumSum'] = df_group_merge['CumSum'].fillna(method= 'ffill')
 df_group_merge['CumSum'] = df_group_merge['CumSum'].astype('float64')
 df_group_merge['Amount'] = df_group_merge['Amount'].fillna(0)
 df_group_merge['Zarobek netto'] = df_group_merge['Wartość w PLN_x'] - df_group_merge['CumSum']
-
 
 #Dropping rows which are already in the file
 df_group_merge = df_group_merge[df_group_merge['Data'] != df_group_merge['Data'].min()]
@@ -145,11 +152,17 @@ v.chart3(df_chart3)
 #Tables
 df_table_topwin = df_data[['Produkt', 'Akcje zmiana w %']][df_data['Data'] == df_data['Data'].max()].sort_values(by= ['Akcje zmiana w %'], ascending= False)
 df_table_topwin = df_table_topwin[df_table_topwin['Akcje zmiana w %'] > 0]
-v.table1(df_table_topwin)
+if df_table_topwin.empty:
+    pass
+else:
+    v.table1(df_table_topwin)
 
 df_table_toplose = df_data[['Produkt', 'Akcje zmiana w %']][df_data['Data'] == df_data['Data'].max()].sort_values(by= ['Akcje zmiana w %'])
 df_table_toplose = df_table_toplose[df_table_toplose['Akcje zmiana w %'] < 0]
-v.table2(df_table_toplose)
+if df_table_toplose.empty:
+    pass
+else:
+    v.table2(df_table_toplose)
 
 #Saving data
 daily_sum_file = config['files']['daily_sum_file']
